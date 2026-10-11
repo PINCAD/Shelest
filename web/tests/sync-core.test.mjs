@@ -1,0 +1,46 @@
+// Tests the actual Kotlin/JS artifact, not a reimplementation of its rules.
+import assert from 'node:assert/strict';
+import { ShelestCore, SharedSyncSession } from '../../shared/build/dist/js/productionLibrary/Sh-shared.mjs';
+const core = ShelestCore.getInstance();
+const account = {id:'one', login:'reader', isPremium:false, maxBookBytes:4096};
+const record = {sha256:'a'.repeat(64), title:'Book', author:'', fileType:'EPUB', size:24, position:.4,
+  pageIndex:3, updatedAt:946684800100, deviceId:'fixture-device',
+  readingPlace:{platform:'android',segment:1,page:3,character:40,layout:'layout',anchor:'Уникальный отрывок достаточной длины'}};
+assert.equal(core.accountDisplayName(JSON.stringify(account)), 'reader');
+assert.equal(core.positionAction(946684800000, JSON.stringify(record), 'android', false), 'LOCAL_PLACE');
+assert.equal(core.positionAction(946684800000, JSON.stringify(record), 'web', false), 'TEXT_ANCHOR');
+assert.equal(core.positionAction(record.updatedAt, JSON.stringify(record), 'web', false), 'KEEP_LOCAL');
+assert.equal(core.positionAction(946684800000, JSON.stringify({...record,fileType:'PDF',pageIndex:null}), 'android', false), 'INCOMPATIBLE');
+assert.equal(core.positionAction(946684800000, JSON.stringify({...record,readingPlace:null}), 'web', false), 'INCOMPATIBLE');
+assert.equal(JSON.parse(core.syncRequestJson(JSON.stringify([record]), 0)).books[0].readingPlace.character,40);
+assert.throws(()=>core.syncRequestJson(JSON.stringify([{...record,deviceId:'bad'}]),0));
+assert.throws(()=>core.syncResponseJson(JSON.stringify({books:[{...record,position:2}],deletedBooks:['a'.repeat(64)],serverTime:100})));
+assert.equal(core.anchorOffset('A \u00a0\ufeffДостаточно длинный отрывок.', 'Достаточно длинный отрывок.'), 4);
+assert.equal(core.progressTime(0,Date.now(),true),946684800000);
+assert.equal(core.shouldUpload(false,false,false),false);
+assert.equal(core.shouldDownload(false,false,true,false),false);
+assert.equal(core.shouldUpload(true,false,false),true);
+assert.equal(core.validFileSize(4097,4096),false);
+assert.equal(core.validFileSize(1.1,4096),false);
+const settings = JSON.parse(core.webSettings('{"autoSync":false,"syncDeletions":false,"dailyGoal":35,"custom":"keep","fontSize":99}'));
+assert.equal(settings.autoSync,false); assert.equal(settings.syncDeletions,false);
+assert.equal(settings.custom,'keep'); assert.equal(settings.dailyGoal,35); assert.equal(settings.fontSize,36);
+assert.equal(JSON.parse(core.webSettings('{}')).autoSync,true);
+const state = new SharedSyncSession();
+assert.equal(state.begin(),-1); assert.equal(state.updateAccount(JSON.stringify(account)),true);
+let run=state.begin(); assert.equal(state.begin(),-1);
+assert.equal(state.acceptCursor(run,200),true); assert.equal(state.acceptCursor(run,100),true);
+assert.equal(state.cursor,200);
+assert.equal(state.updateAccount(JSON.stringify({...account,storageUsedBytes:24})),false);
+assert.equal(state.isCurrent(run),true);
+state.updateAccount(JSON.stringify({...account,id:'two'}));
+assert.equal(state.cursor,0); assert.equal(state.acceptCursor(run,900),false);
+state.finish(run); run=state.begin();
+state.setReading(true); assert.equal(state.isCurrent(run),false);
+state.setReading(false); assert.equal(state.isCurrent(run),false);
+state.finish(run); run=state.begin(); state.invalidate();
+assert.equal(state.acceptCursor(run,300),false);
+assert.equal(core.passwordPath(false),'auth/web/password');
+assert.equal(JSON.parse(core.passwordPayload(' reader ','existing',false)).login,'reader');
+assert.equal(core.serverError('{"error":"invalid_credentials"}',401),'Неверный логин или пароль');
+console.log('Compiled Kotlin/JS sync/account/settings parity checks passed');

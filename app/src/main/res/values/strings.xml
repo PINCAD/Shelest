@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Шелест</string>
+    <string name="library_title">Библиотека</string>
+    <string name="add_book">Добавить книгу</string>
+    <string name="no_books">Нет книг</string>
+    <string name="delete_book">Удалить</string>
+    <string name="settings">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="define_word">Определить</string>
+    <string name="loading_definition">Поиск определения…</string>
+    <string name="not_found">Не найдено</string>
+    <string name="open_wikipedia">Открыть в Википедии</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="line_spacing">Межстрочный интервал</string>
+    <string name="theme">Тема</string>
+    <string name="dark_theme">Тёмная</string>
+    <string name="light_theme">Светлая</string>
+    <string name="wikipedia_lang">Язык Википедии</string>
+    <string name="lang_russian">Русский</string>
+    <string name="lang_english">Английский</string>
+    <string name="error_opening">Не удалось открыть файл</string>
+    <string name="supported_formats">Поддерживаемые форматы: TXT, EPUB, FB2, PDF</string>
+    <string name="from_cache">из кеша</string>
+    <string name="bookmark_added">Закладка добавлена</string>
+    <string name="bookmark_removed">Закладка удалена</string>
+    <string name="reading_mode">Режим чтения</string>
+    <string name="mode_light">Светлый</string>
+    <string name="mode_sepia">Сепия</string>
+    <string name="mode_dark">Тёмный</string>
+    <string name="horizontal_scrolling">Горизонтальное листание</string>
+    <string name="justify_text">Выравнивание по ширине</string>
+    <string name="show_page_numbers">Показывать номера страниц</string>
+    <string name="margin_dp">Поля (отступы)</string>
+
+    <!-- Home-screen widgets -->
+    <string name="widget_small_description">Обложка книги и место, на котором вы остановились. Нажатие открывает книгу.</string>
+    <string name="widget_description">Книга, которую вы читаете: место, на котором остановились, и кнопки «Читать» и «Слушать».</string>
+    <string name="widget_large_description">Книга, которую вы читаете, и три последние с полки. Каждая открывается одним нажатием.</string>
+    <string name="widget_read">Читать</string>
+    <string name="widget_listen">Слушать</string>
+    <string name="widget_header">Продолжить чтение</string>
+    <string name="widget_shelf">Ещё на полке</string>
+    <string name="widget_empty">Откройте книгу, и она появится здесь</string>
+    <string name="widget_empty_short">Здесь будет книга</string>
+    <string name="widget_cover_desc">Обложка книги</string>
+</resources>

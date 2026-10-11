@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Four cells by two: the cover, the title and the two buttons need the width, and anything
+  narrower turns the book's name into an ellipsis.
+
+  The file keeps its old name on purpose. It is named in the manifest, and a widget already
+  sitting on somebody's home screen is bound to the provider that declares it — renaming the
+  resource is the kind of tidying that quietly turns a placed widget into a grey box.
+
+  updatePeriodMillis is the floor the system allows — half an hour — and it is only a safety
+  net. The widget is redrawn the moment progress is written down (see CurrentBookWidget.refresh),
+  so in practice it is already right by the time the launcher comes back into view; this is for
+  the case where the app has not run at all and the streak line has gone stale overnight.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_description"
+    android:initialLayout="@layout/widget_book_medium"
+    android:minHeight="110dp"
+    android:minWidth="250dp"
+    android:previewLayout="@layout/widget_book_medium"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellHeight="2"
+    android:targetCellWidth="4"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

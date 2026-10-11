@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The same widget palette after dark. See values/colors.xml.
+
+  The red is taken down rather than lightened: a saturated card that was pleasant at noon is a
+  lamp on a dark home screen, and the app's own dark accent (0xFFCB7C6E) is a pink that stops
+  looking like brick once there is nothing bright next to it.
+-->
+<resources>
+    <color name="widget_bg">#FF7E362D</color>
+    <color name="widget_text">#FFFFFFFF</color>
+    <color name="widget_text_dim">#B3FFFFFF</color>
+    <color name="widget_accent">#FFF6EAE7</color>
+    <color name="widget_on_accent">#FF7E362D</color>
+    <color name="widget_track">#33FFFFFF</color>
+    <color name="widget_button">#1FFFFFFF</color>
+    <color name="widget_outline">#59FFFFFF</color>
+</resources>

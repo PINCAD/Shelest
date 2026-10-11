@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Stands in for a book with no cover file — TXT imports mostly, which have nowhere to get one
+  from. A plain shape rather than a vector: RemoteViews are inflated in the launcher's process,
+  and a flat rectangle is the one thing every launcher on every version draws without argument.
+
+  Read as a closed book seen face on: a pale plate with a lighter block of pages inset in it.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_button" />
+            <corners android:radius="8dp" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/widget_outline" />
+        </shape>
+    </item>
+    <item
+        android:left="10dp"
+        android:top="14dp"
+        android:right="10dp"
+        android:bottom="14dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/widget_track" />
+            <corners android:radius="2dp" />
+        </shape>
+    </item>
+</layer-list>

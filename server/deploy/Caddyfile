@@ -1,0 +1,38 @@
+api.shelest-book.ru {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8000 {
+		header_up X-Shelest-Client-IP {remote_host}
+	}
+}
+
+shelest-book.ru {
+	encode zstd gzip
+	@backend path /api/* /admin /admin/* /static/*
+	handle @backend {
+		reverse_proxy 127.0.0.1:8000 {
+			header_up X-Shelest-Client-IP {remote_host}
+		}
+	}
+	handle /assets/* {
+		root * /opt/shelest/web/dist
+		header Cache-Control "public, max-age=31536000, immutable"
+		header X-Content-Type-Options nosniff
+		file_server
+	}
+	handle /downloads/* {
+		root * /opt/shelest/web/dist
+		header Cache-Control "no-cache"
+		header X-Content-Type-Options nosniff
+		@apk path /downloads/*.apk
+		header @apk Content-Type "application/vnd.android.package-archive"
+		header @apk Content-Disposition "attachment"
+		file_server
+	}
+	handle {
+		root * /opt/shelest/web/dist
+		header Cache-Control "no-cache"
+		header X-Content-Type-Options nosniff
+		try_files {path} /index.html
+		file_server
+	}
+}

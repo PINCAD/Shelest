@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Carries the percentage. A figure on its own background is read as a fact about the book;
+     the same figure loose in a line of text is read as part of the sentence around it. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/widget_button" />
+    <corners android:radius="10dp" />
+</shape>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- Read-aloud. The foreground service is what stops the system from putting the process
+         to sleep the moment the screen goes off, and from Android 14 the media-playback type
+         needs its own permission alongside the general one. POST_NOTIFICATIONS is asked for at
+         runtime on Android 13+: without it the controls are simply not shown, and the reading
+         itself carries on either way. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".LexiReadApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Shelest"
+        android:usesCleartextTraffic="false">
+
+        <!-- singleTask so that the widget lands in the copy of the app that is already running,
+             with its library state and, if a book is open, its reader. Without it every tap on
+             the widget starts a second task, and backing out of one of them walks through a
+             history the reader never made. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Books whose type the system actually knows. Only a handful of the formats this
+                 app reads have a type Android can name: ask a file manager what a .fb2 is and it
+                 answers "application/octet-stream", because MimeTypeMap has never heard of one.
+                 That is why this filter alone left the app off the "open with" list for exactly
+                 the format most of its readers use. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="text/markdown" />
+                <data android:mimeType="text/x-markdown" />
+                <data android:mimeType="text/rtf" />
+                <data android:mimeType="application/rtf" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/x-fictionbook+xml" />
+                <data android:mimeType="application/fb2" />
+                <data android:mimeType="application/x-fictionbook" />
+                <data android:mimeType="application/vnd.comicbook+zip" />
+                <data android:mimeType="application/x-cbz" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </intent-filter>
+
+            <!-- Books recognised by their name instead.
+                 The type is left wide open and the file name does the deciding, which is the only
+                 thing that works for a format the system has no type for.
+
+                 Each extension is listed several times over with a growing number of ".*" in
+                 front. That is not decoration: Android's glob matcher has no backtracking, so
+                 ".*\\.fb2" stops looking at the *first* dot in the path and misses
+                 "Толстой.Л.Н.Война.fb2" — and misses every content:// path that carries a
+                 percent-encoded folder with a dot in it. One pattern per possible number of
+                 earlier dots is the standard way round it. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+
+                <data android:pathPattern=".*\\.fb2" />
+                <data android:pathPattern=".*\\..*\\.fb2" />
+                <data android:pathPattern=".*\\..*\\..*\\.fb2" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.fb2" />
+                <!-- Nearly every FB2 in circulation is handed round zipped. -->
+                <data android:pathPattern=".*\\.fb2\\.zip" />
+                <data android:pathPattern=".*\\..*\\.fb2\\.zip" />
+                <data android:pathPattern=".*\\..*\\..*\\.fb2\\.zip" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.fb2\\.zip" />
+
+                <data android:pathPattern=".*\\.epub" />
+                <data android:pathPattern=".*\\..*\\.epub" />
+                <data android:pathPattern=".*\\..*\\..*\\.epub" />
+
+                <data android:pathPattern=".*\\.pdf" />
+                <data android:pathPattern=".*\\..*\\.pdf" />
+                <data android:pathPattern=".*\\..*\\..*\\.pdf" />
+
+                <data android:pathPattern=".*\\.txt" />
+                <data android:pathPattern=".*\\..*\\.txt" />
+                <data android:pathPattern=".*\\..*\\..*\\.txt" />
+
+                <data android:pathPattern=".*\\.rtf" />
+                <data android:pathPattern=".*\\..*\\.rtf" />
+                <data android:pathPattern=".*\\..*\\..*\\.rtf" />
+
+                <data android:pathPattern=".*\\.cbz" />
+                <data android:pathPattern=".*\\..*\\.cbz" />
+                <data android:pathPattern=".*\\..*\\..*\\.cbz" />
+
+                <data android:pathPattern=".*\\.docx" />
+                <data android:pathPattern=".*\\..*\\.docx" />
+                <data android:pathPattern=".*\\..*\\..*\\.docx" />
+
+                <data android:pathPattern=".*\\.md" />
+                <data android:pathPattern=".*\\..*\\.md" />
+                <data android:pathPattern=".*\\..*\\..*\\.md" />
+
+                <data android:pathPattern=".*\\.htm" />
+                <data android:pathPattern=".*\\..*\\.htm" />
+                <data android:pathPattern=".*\\.html" />
+                <data android:pathPattern=".*\\..*\\.html" />
+            </intent-filter>
+
+            <!-- Sent from another app rather than opened from a folder: a book arriving over
+                 Telegram or out of a mail attachment is shared, not viewed. Only the named types
+                 here, never "*/*" — an app in the share sheet for every photograph and every link
+                 is an app that has to be uninstalled to be got rid of. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/pdf" />
+                <data android:mimeType="application/x-fictionbook+xml" />
+                <data android:mimeType="application/fb2" />
+                <data android:mimeType="application/rtf" />
+                <data android:mimeType="application/vnd.comicbook+zip" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </intent-filter>
+        </activity>
+
+        <!-- The home-screen widgets, one receiver per size — Android has no way to declare one
+             widget the user can pick a size for. Exported because the thing that sends them
+             their update broadcasts is the launcher, which is another app. -->
+        <receiver
+            android:name=".widget.SmallBookWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_book_small_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.CurrentBookWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_current_book_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.LargeBookWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_book_large_info" />
+        </receiver>
+
+        <service
+            android:name=".domain.tts.TtsPlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

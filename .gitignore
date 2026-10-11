@@ -1,0 +1,45 @@
+# Каталоги сборки. Держать их под контролем версий нельзя: любой checkout или откат
+# подменяет .class-файлы и кэши инкрементальной компиляции вразнобой, после чего Kotlin
+# выдаёт «Unresolved reference» на объявления, которых никто не трогал.
+build/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+
+# Пути к SDK и ключам — они свои на каждой машине.
+local.properties
+keystore.properties
+*.jks
+*.keystore
+
+# Android Studio
+.idea/
+*.iml
+.cxx/
+captures/
+
+# Прочее
+.DS_Store
+Thumbs.db
+
+# Server-only credentials, runtime database, uploaded books, and Python artifacts.
+server/.env
+server/.venv/
+server/var/
+server/__pycache__/
+server/config/__pycache__/
+server/syncapi/__pycache__/
+server/syncapi/migrations/__pycache__/
+
+# Web client build output and installed npm packages.
+web/node_modules/
+web/dist/
+artifacts/
+
+# Ключи API, настройки IDE/агента и внутренние памятки с адресами сервера.
+secrets.properties
+.claude/
+.idea/
+START_HERE_*.md
+PROJECT_HANDOFF.md

@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import ts from 'typescript';
+import { ShelestCore } from '../../shared/build/dist/js/productionLibrary/Sh-shared.mjs';
+globalThis.__sharedCore = ShelestCore.getInstance();
+const source = readFileSync(new URL('../src/readingAnchor.ts', import.meta.url), 'utf8')
+  .replace('import { sharedCore } from "./sharedCore";', 'const sharedCore = globalThis.__sharedCore;');
+const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+const { anchorOffset, normalizeAnchor, rawOffsetForNormalized } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
+const quote = 'Неповторимый отрывок достаточно длинный для точного восстановления страницы.';
+const anchor = normalizeAnchor(quote);
+assert.equal(anchorOffset('Начало. \n' + quote, anchor), 9);
+assert.equal(anchorOffset('Начало. \n' + quote.replaceAll(' ', '\n\u00a0'), anchor), 9);
+assert.equal(anchorOffset(quote + quote, anchor), null);
+assert.equal(anchorOffset(quote, 'коротко'), null);
+assert.equal(anchorOffset('Другой текст', anchor), null);
+console.log('5 anchor tests passed');
+const progressSource = readFileSync(new URL('../src/readingProgress.ts', import.meta.url), 'utf8')
+  .replace('import { sharedCore } from "./sharedCore";', 'const sharedCore = globalThis.__sharedCore;');
+const progressCompiled = ts.transpileModule(progressSource, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText;
+const { progressTime } = await import('data:text/javascript;base64,' + Buffer.from(progressCompiled).toString('base64'));
+const now = Date.now();
+assert.equal(progressTime({page:1,position:0,lastOpenedAt:now}), 946684800000);
+assert.equal(progressTime({page:5,position:0.2,lastOpenedAt:now}), now);
+assert.equal(progressTime({page:1,position:0,lastOpenedAt:now,progressUpdatedAt:0}), 946684800000);
+assert.equal(progressTime({page:1,position:0,lastOpenedAt:now,progressUpdatedAt:now-1000}), now-1000);
+console.log('4 progress conflict tests passed');
+assert.equal(anchorOffset('Начало. Последняястрочка.', 'Последняястрочка.'), 8);
+assert.equal(anchorOffset('Последняястрочка. Последняястрочка.', 'Последняястрочка.'), null);
+console.log('2 short unique anchor tests passed');
+assert.equal(rawOffsetForNormalized(' A \n B C ', 1), 5);
+assert.equal(rawOffsetForNormalized(' A \n B C ', 3), 9);
+console.log('2 chunk-boundary offset tests passed');

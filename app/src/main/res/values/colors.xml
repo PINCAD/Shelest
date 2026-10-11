@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The home-screen widgets' palette.
+
+  They cannot use the app's Compose theme: a widget is drawn by the launcher's process from a
+  RemoteViews tree, where MaterialTheme does not exist and every colour has to be a resource.
+  So the reader's own accent choice cannot reach it — instead the card is painted in the app's
+  own brick red (AccentLight, 0xFFA8493D in ui/theme/Color.kt) and everything on it is white.
+  A home screen is a wall of other people's white cards; the one that belongs to the app should
+  be the app's colour from across the room.
+
+  Names are kept from when the card was paper-coloured, so widget_accent now means "the colour
+  that stands out against the card" — which on a red card is white.
+-->
+<resources>
+    <color name="widget_bg">#FFA8493D</color>
+    <color name="widget_text">#FFFFFFFF</color>
+    <color name="widget_text_dim">#BFFFFFFF</color>
+    <!-- The filled bar, the filled button: white on the red field. -->
+    <color name="widget_accent">#FFFFFFFF</color>
+    <!-- Reads on top of widget_accent, so it is the card's red coming back through. -->
+    <color name="widget_on_accent">#FFA8493D</color>
+    <color name="widget_track">#40FFFFFF</color>
+    <!-- Pills and the cover's backing plate: white pulled almost all the way down. -->
+    <color name="widget_button">#26FFFFFF</color>
+    <!-- Hairlines: the outlined button, the row divider. -->
+    <color name="widget_outline">#66FFFFFF</color>
+</resources>

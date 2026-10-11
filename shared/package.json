@@ -1,0 +1,8 @@
+{
+  "name": "@shelest/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "build/dist/js/productionLibrary/Sh-shared.mjs",
+  "types": "build/dist/js/productionLibrary/Sh-shared.d.ts"
+}

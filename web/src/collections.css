@@ -1,0 +1,30 @@
+.collection-section { margin: 18px 0 22px; }
+.collection-section h2 { font-size: 15px; margin: 0 0 12px; color: var(--muted); }
+.collection-strip { display: flex; gap: 12px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x proximity; }
+.collection-card { flex: 0 0 224px; display: flex; align-items: center; gap: 12px; min-height: 112px; padding: 14px; border-radius: 20px; border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent); background: var(--accent-soft); color: var(--text); text-align: left; scroll-snap-align: start; transition: border-color .15s, background .15s; }
+.collection-card:hover { border-color: var(--accent); }
+.collection-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.collection-covers { position: relative; flex: 0 0 74px; height: 82px; display: block; }
+.collection-mini-cover { position: absolute; width: 54px; height: 76px; background: var(--surface); border: 1px solid var(--line); border-radius: 7px; overflow: hidden; left: 0; top: 0; display: grid; place-items: center; box-shadow: 0 2px 6px #0001; }
+.collection-mini-cover:nth-child(1) { left: 16px; top: 6px; }.collection-mini-cover:nth-child(2) { left: 8px; top: 3px; }
+.collection-mini-cover img { width: 100%; height: 100%; object-fit: cover; }
+.collection-mini-cover .book-cover { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; padding: 5px; box-shadow: none; }
+.collection-mini-cover .cover-frame { inset: 4px; border-radius: 3px; }
+.collection-mini-cover .cover-format { font-size: 4px; }
+.collection-mini-cover .cover-title { font-size: 7px; line-height: 1.2; }
+.collection-mini-cover .cover-author { display: none; }
+.dialog-footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; margin-top: 8px; }
+.dialog-footer .text-danger { border: 0; background: transparent; border-radius: 12px; min-height: 44px; padding: 8px; font: inherit; font-size: 13px; cursor: pointer; }
+.dialog-footer .text-danger:hover { background: color-mix(in srgb, var(--danger, #ba3428) 8%, transparent); }
+.dialog-footer .primary-button { justify-self: end; }
+.common-cover-status { position:absolute; right:6px; bottom:6px; padding:4px 7px; border-radius:8px; background:var(--surface); color:var(--text); font-size:11px; font-weight:600; line-height:1.3; pointer-events:none; }
+.common-cover-status.common-new-book { color:var(--accent); }
+.collection-copy { display: grid; gap: 8px; min-width: 0; }.collection-copy b { font-size: 14px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }.collection-copy small { color: var(--muted); }
+.collection-picker-list { display: grid; gap: 6px; max-height: 240px; overflow-y: auto; margin-bottom: 18px; }
+.collection-picker-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--text); text-align: left; }.collection-picker-item span { flex: 1; overflow-wrap: anywhere; }.collection-picker-item small { color: var(--muted); }
+.collection-member-list { padding: 0; list-style: none; max-height: 320px; overflow: auto; margin: 0; }.collection-member-list li { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); }.collection-member-list li>span { flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: 14px; }.collection-member-list small { color: var(--muted); margin-right: 8px; }.collection-member-list li>div { display: flex; }.collection-member-list button, .collection-selection-bar button { width: 40px; height: 40px; border: 0; border-radius: 12px; background: transparent; display: inline-flex; align-items: center; justify-content: center; color: inherit; }.collection-member-list button:hover,.collection-selection-bar button:hover { background: var(--accent-soft); }.collection-member-list button:disabled { opacity: .3; }
+.collection-order-heading { font-size: 15px; margin: 0; }.collection-heading-actions { display: flex; gap: 8px; align-items: center; }.collection-missing { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.collection-selection-bar { display: flex; align-items: center; gap: 4px; padding: 8px; margin-bottom: 16px; background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent); border-radius: 16px; color: var(--text); }.collection-selection-bar strong { flex: 1; font-size: 14px; }.collection-selection-bar button[aria-label="В коллекцию"] { width: auto; gap: 8px; padding: 0 10px; color: var(--accent); }.text-danger { color: var(--danger, #ba3428) !important; }
+.collection-selected-cover { position: absolute; inset: 0; border: 3px solid var(--accent); border-radius: inherit; pointer-events: none; }
+@media(max-width:600px) { .collection-card { flex-basis: 208px; }.collection-selection-bar { gap: 0; }.collection-selection-bar button { width: 36px; height: 40px; }.collection-selection-bar strong { font-size: 12px; }.collection-selection-bar button[aria-label="В коллекцию"] span { display: none; }.collection-heading-actions .secondary-button { font-size: 12px; }.collection-member-list button { width: 36px; } }
+@media(max-width:480px) { .common-library-controls .common-search-sort select { max-width:72%; font-size:11px; padding-inline:6px; } }

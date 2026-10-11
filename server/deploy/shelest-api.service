@@ -1,0 +1,27 @@
+[Unit]
+Description=Shelest account and sync API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=shelest
+Group=shelest
+WorkingDirectory=/opt/shelest/server
+EnvironmentFile=/etc/shelest/shelest.env
+ExecStart=/opt/shelest/server/.venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 1 --worker-class gthread --threads 4 --timeout 120 --access-logfile - --error-logfile -
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/shelest
+
+[Install]
+WantedBy=multi-user.target

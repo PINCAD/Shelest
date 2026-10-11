@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import { ShelestCore } from '../../shared/build/dist/js/productionLibrary/Sh-shared.mjs';
+
+const core = ShelestCore.getInstance();
+assert.equal(core.defaultAutoSync, true);
+assert.equal(core.canPublishPosition(true, false), false);
+assert.equal(core.canPublishPosition(false, true), false);
+assert.equal(core.canPublishPosition(true, true), true);
+assert.equal(core.blocksBook(false, false, true, false), true);
+assert.equal(core.blocksBook(false, false, true, true), false);
+assert.equal(core.blocksBook(false, true, false, true), true);
+assert.equal(core.blocksBook(true, false, false, true), true);
+assert.equal(core.storageFraction(5, 10), .5);
+assert.equal(core.storageFraction(200, 100), 1);
+assert.equal(core.storageFraction(100, 0), 0);
+assert.equal(core.storageFraction(NaN, 100), 0);
+assert.equal(core.formatBytes(1024 ** 3), '1 ГБ');
+assert.equal(core.initials(' Леон  Некрасов '), 'ЛН');
+assert.equal(core.initials(''), 'Ш');
+assert.equal(core.validateLogin('reader', 'older', '', false), '');
+assert.notEqual(core.validateLogin('reader', 'older', 'older', true), '');
+assert.notEqual(core.validateLogin('reader', 'long-password', 'different', true), '');
+assert.equal(core.validateLogin('reader', 'long-password', 'long-password', true), '');
+console.log('19 checks passed against the compiled Kotlin/JS module');
